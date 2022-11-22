@@ -1,12 +1,13 @@
 // Add js here.
-let videopl = document.getElementById("videoplayer");
+const video = document.getElementById("videoplayer");
 
 document.onload = function() {videoAutoplay()};
 
 function videoAutoplay() {
-videopl.loop = false;
-  videopl.autoplay = false;
-  videopl.load(); 
+    console.log('The onload function was loaded')
+    video.loop = false;
+  video.autoplay = false;
+  video.load();
 }
 
 document.getElementById("play").onclick = function() {playvideo()};
@@ -15,61 +16,92 @@ document.getElementById("slower").onclick = function() {slowvideo()};
 document.getElementById("faster").onclick = function() {fastvideo()};
 document.getElementById("skip").onclick = function() {skipvideo()};
 document.getElementById("mute").onclick = function() {mutevideo()};
-document.getElementById("slider").ondrag = function() {videovolume()};
+
+const volume = document.querySelector("#slider");
+volume.addEventListener('input', videovolume());
+
 
 
 function playvideo()
 {
-    videopl.play();
+    if (video.paused || video.ended) {
+      video.play();
+    }
 }
 
 function pausevideo()
 {
-    videopl.pause();
+    video.pause();
 }
 
 function slowvideo()
 {
-    
-    let speed = videopl.playbackRate;
-    if (speed = 0.5)
+    let speed = video.playbackRate;
+    console.log("speed before1: "+speed);
+    if (speed == 0.5)
     {
     alert("Video is at slowest speed!");
     }
     else{
-        speed=speed-0.5;
+        speed*=0.5;
     }
-    videopl.playbackRate=speed;
+    video.playbackRate=speed;
+    console.log("speed after1: "+speed);
 }
 
 function fastvideo()
 {
-    let speed = videopl.playbackRate;
-    if (speed = 2)
+    let speed = video.playbackRate;
+    console.log(speed);
+    if (speed == 2.0)
     {
     alert("Video is at fastest speed!");
     }
     else{
-        speed=speed+0.5;
+        speed*=2;
     }
-    videopl.playbackRate=speed;
+    console.log("speed after1: "+speed);
+    video.playbackRate=speed;
+    console.log("speed after2: "+speed);
 }
 
 function skipvideo()
 {
-    videopl.pause();
+    let currentDuration = video.currentTime;
+    console.log(currentDuration);
+    if(currentDuration+15>=video.duration)
+    {
+        currentDuration=0;
 }
+    else{
+        currentDuration+=15;
+    }
+    console.log(currentDuration);
+    video.currentTime=currentDuration;
+    video.play();
+}
+
 function mutevideo()
 {
-    videopl.pause();
+    video.muted = !video.muted;
+    if (video.muted) {
+      document.getElementById("mute").innerHTML = "Unmute";
+      volume.value=0;
+      video.volume=0;
+    } else {
+        document.getElementById("mute").innerHTML = "Mute";
+        volume.value=100;
+        video.volume=1;
+    }
+    
 }
 function videovolume()
 {
-    videopl.pause();
-}
-
-
-
-
+    if (video.muted) {
+        video.muted = false;
+      }
+      video.volume = volume.value;
+      console.log(volume.value);
+    }
 
 
