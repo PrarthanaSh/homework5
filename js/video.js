@@ -1,107 +1,99 @@
 // Add js here.
 const video = document.getElementById("videoplayer");
+window.onload = function () {
+    videoAutoplay();
+};
 
-document.onload = function() {videoAutoplay()};
 
 function videoAutoplay() {
     console.log('The onload function was loaded')
     video.loop = false;
-  video.autoplay = false;
-  video.load();
+    video.autoplay = false;
+    document.getElementById('volume').innerHTML = 100;
+    video.load();
 }
 
-document.getElementById("play").onclick = function() {playvideo()};
-document.getElementById("pause").onclick = function() {pausevideo()};
-document.getElementById("slower").onclick = function() {slowvideo()};
-document.getElementById("faster").onclick = function() {fastvideo()};
-document.getElementById("skip").onclick = function() {skipvideo()};
-document.getElementById("mute").onclick = function() {mutevideo()};
+document.getElementById("play").onclick = function () { playvideo() };
+document.getElementById("pause").onclick = function () { pausevideo() };
+document.getElementById("slower").onclick = function () { slowvideo() };
+document.getElementById("faster").onclick = function () { fastvideo() };
+document.getElementById("skip").onclick = function () { skipvideo() };
+document.getElementById("mute").onclick = function () { mutevideo() };
 
-const volume = document.querySelector("#slider");
-volume.addEventListener('input', videovolume());
+let volume = document.getElementById("slider");
+volume.addEventListener('mouseup', function () {
+    if (video.muted && volume.value != 0) {
+        video.muted = false;
+        document.getElementById("mute").innerHTML = "Mute";
+    }
+    video.volume = volume.value / 100;
+    document.getElementById('volume').innerHTML = volume.value;
+    console.log(volume.value);
+});
 
-
-
-function playvideo()
-{
+function playvideo() {
     if (video.paused || video.ended) {
-      video.play();
+        video.play();
     }
 }
 
-function pausevideo()
-{
+function pausevideo() {
     video.pause();
 }
 
-function slowvideo()
-{
+function slowvideo() {
     let speed = video.playbackRate;
-    console.log("speed before1: "+speed);
-    if (speed == 0.5)
-    {
-    alert("Video is at slowest speed!");
+    console.log("speed before1: " + speed);
+    if (speed == 0.5) {
+        alert("Video is at slowest speed!");
     }
-    else{
-        speed*=0.5;
+    else {
+        speed *= 0.5;
     }
-    video.playbackRate=speed;
-    console.log("speed after1: "+speed);
+    video.playbackRate = speed;
+    console.log("speed after1: " + speed);
 }
 
-function fastvideo()
-{
+function fastvideo() {
     let speed = video.playbackRate;
     console.log(speed);
-    if (speed == 2.0)
-    {
-    alert("Video is at fastest speed!");
+    if (speed == 2.0) {
+        alert("Video is at fastest speed!");
     }
-    else{
-        speed*=2;
+    else {
+        speed *= 2;
     }
-    console.log("speed after1: "+speed);
-    video.playbackRate=speed;
-    console.log("speed after2: "+speed);
+    console.log("speed after1: " + speed);
+    video.playbackRate = speed;
+    console.log("speed after2: " + speed);
 }
 
-function skipvideo()
-{
+function skipvideo() {
     let currentDuration = video.currentTime;
     console.log(currentDuration);
-    if(currentDuration+15>=video.duration)
-    {
-        currentDuration=0;
-}
-    else{
-        currentDuration+=15;
+    if (currentDuration + 15 >= video.duration) {
+        currentDuration = 0;
+    }
+    else {
+        currentDuration += 15;
     }
     console.log(currentDuration);
-    video.currentTime=currentDuration;
+    video.currentTime = currentDuration;
     video.play();
 }
 
-function mutevideo()
-{
+function mutevideo() {
     video.muted = !video.muted;
     if (video.muted) {
-      document.getElementById("mute").innerHTML = "Unmute";
-      volume.value=0;
-      video.volume=0;
+        document.getElementById("mute").innerHTML = "Unmute";
+        //volume.value=0;
+        video.volume = 0;
     } else {
         document.getElementById("mute").innerHTML = "Mute";
-        volume.value=100;
-        video.volume=1;
+        //volume.value=100;
+        video.volume = volume.value / 100;
     }
-    
+
 }
-function videovolume()
-{
-    if (video.muted) {
-        video.muted = false;
-      }
-      video.volume = volume.value;
-      console.log(volume.value);
-    }
 
 
